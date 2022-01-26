@@ -30,7 +30,7 @@ app.post('/api/notes', (request, response) => {
     : 0
   
   const note = request.body
-  note.id = maxId + 14
+  note.id = maxId + 1
 
   notes = notes.concat(note)
 
