@@ -32,7 +32,9 @@ app.get('/api/notes', (request, response) => {
 
 app.get('/api/notes/:id', (request, response) => {
   const id = request.params.id
+  console.log(id)
   const note = notes.find(note => note.id === id)
+  console.log(note)
   response.json(note)
 })
 
