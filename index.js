@@ -1,6 +1,8 @@
 const express = require('express')
 const app = express()
 
+app.use(express.json())
+
 let notes = [
     {
       id: 1,
@@ -21,8 +23,6 @@ let notes = [
       important: true
     }
 ]
-
-app.use(express.json())
 
 app.post('/api/notes', (request, response) => {
   const body = request.body
