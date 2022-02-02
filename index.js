@@ -1,3 +1,4 @@
+require('dotenv').config()
 const express = require('express')
 const app = express()
 const cors = require('cors')
@@ -7,8 +8,7 @@ app.use(cors())
 app.use(express.json())
 app.use(express.static('build'))
 
-const url = 
-  `mongodb+srv://majabaza:${password}@cluster0.k9dqp.mongodb.net/note-app?retryWrites=true&w=majority`
+const url = process.env.MONGODB_URI
 
 mongoose.connect(url)
 
@@ -56,7 +56,9 @@ app.get('/', (request, response) => {
 })
 
 app.get('/api/notes', (request, response) => {
+  Note.find({}).then(notes => {
     response.json(notes)
+  })
 })
 
 const generateId = () => {
