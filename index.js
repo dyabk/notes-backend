@@ -35,6 +35,36 @@ app.post('/api/notes', (request, response) => {
   })
 })
 
+app.get('/', (request, response) => {
+  response.send('<h1>Hello World!</h1>')
+})
+
+app.get('/api/notes', (request, response) => {
+Note.find({}).then(notes => {
+  response.json(notes)
+})
+})
+
+app.get('/api/notes/:id', (request, response, next) => {
+Note.findById(request.params.id)
+  .then(note => {
+    if (note) {
+      response.json(note)
+    } else {
+      response.status(404).end()
+    }
+  })
+  .catch(error => next(error))
+})
+
+app.delete('/api/notes/:id', (request, response) => {
+Note.findByIdAndRemove(request.params.id)
+  .then(result => {
+    response.status(204).end()
+  })
+  .catch(error => next(error))
+})
+
 const unknownEndpoint = (request, response) => {
   response.status(404).send({ error: 'unknown endpoint' })
 }
@@ -73,36 +103,6 @@ let notes = [
       important: true
     }
 ]
-
-app.get('/', (request, response) => {
-    response.send('<h1>Hello World!</h1>')
-})
-
-app.get('/api/notes', (request, response) => {
-  Note.find({}).then(notes => {
-    response.json(notes)
-  })
-})
-
-app.get('/api/notes/:id', (request, response, next) => {
-  Note.findById(request.params.id)
-    .then(note => {
-      if (note) {
-        response.json(note)
-      } else {
-        response.status(404).end()
-      }
-    })
-    .catch(error => next(error))
-})
-
-app.delete('/api/notes/:id', (request, response) => {
-  Note.findByIdAndRemove(request.params.id)
-    .then(result => {
-      response.status(204).end()
-    })
-    .catch(error => next(error))
-})
 
 const PORT = process.env.PORT
 app.listen(PORT, () => {
