@@ -16,7 +16,7 @@ app.use(express.static('build'))
 app.use(express.json())
 app.use(requestLogger)
 
-app.post('/api/notes', (request, response) => {
+app.post('/api/notes', (request, response, next) => {
   const body = request.body
 
   if (body.content === undefined) {
@@ -31,9 +31,11 @@ app.post('/api/notes', (request, response) => {
     date: new Date(),
   }
 
-  note.save().then(savedNote => {
-    response.json(savedNote)
-  })
+  note.save()
+    .then(savedNote => {
+      response.json(savedNote)
+    })
+    .catch(error => next(error))
 })
 
 app.get('/', (request, response) => {
