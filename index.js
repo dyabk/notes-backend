@@ -43,6 +43,10 @@ app.get('/api/notes', (request, response) => {
 app.post('/api/notes', (request, response, next) => {
   const body = request.body
 
+  if (body.content === undefined) {
+    return response.status(400).json({ error: 'content missing' })
+  }
+
   const note = new Note({
     content: body.content,
     important: body.important || false,
@@ -57,23 +61,25 @@ app.post('/api/notes', (request, response, next) => {
 })
 
 app.get('/api/notes/:id', (request, response, next) => {
-Note.findById(request.params.id)
-  .then(note => {
-    if (note) {
-      response.json(note)
-    } else {
-      response.status(404).end()
-    }
-  })
-  .catch(error => next(error))
+  Note.findById(request.params.id)
+    .then(note => {
+      if (note) {
+        response.json(note)
+      } else {
+        response.status(404).end()
+      }
+    })
+    .catch(error => {
+      next(error)
+    })
 })
 
-app.delete('/api/notes/:id', (request, response) => {
-Note.findByIdAndRemove(request.params.id)
-  .then(result => {
-    response.status(204).end()
-  })
-  .catch(error => next(error))
+app.delete('/api/notes/:id', (request, response, next) => {
+  Note.findByIdAndRemove(request.params.id)
+    .then(result => {
+      response.status(204).end()
+    })
+    .catch(error => next(error))
 })
 
 app.put('/api/notes/:id', (request, response, next) => {
@@ -97,27 +103,6 @@ const unknownEndpoint = (request, response) => {
 
 app.use(unknownEndpoint)
 app.use(errorHandler)
-
-let notes = [
-    {
-      id: 1,
-      content: "HTML is easy",
-      date: "2019-05-30T17:30:31.098Z",
-      important: true
-    },
-    {
-      id: 2,
-      content: "Browser can execute only Javascript",
-      date: "2019-05-30T18:39:34.091Z",
-      important: false
-    },
-    {
-      id: 3,
-      content: "GET and POST are the most important methods of HTTP protocol",
-      date: "2019-05-30T19:20:14.298Z",
-      important: true
-    }
-]
 
 const PORT = process.env.PORT
 app.listen(PORT, () => {
