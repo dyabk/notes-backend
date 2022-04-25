@@ -1,4 +1,3 @@
-require("dotenv").config();
 const cors = require("cors");
 const express = require("express");
 const app = express();
@@ -81,7 +80,6 @@ app.put("/api/notes/:id", (request, response, next) => {
 app.use(unknownEndpoint);
 app.use(errorHandler);
 
-const PORT = process.env.PORT;
 app.listen(PORT, () => {
   console.log(`Server running on port ${PORT}`);
 });
