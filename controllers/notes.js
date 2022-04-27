@@ -25,7 +25,6 @@ notesRouter.post("/", (request, response, next) => {
   if (body.content === undefined) {
     return response.status(400).json({ error: "content missing" });
   }
-
   const note = new Note({
     content: body.content,
     important: body.important || false,
@@ -42,13 +41,13 @@ notesRouter.post("/", (request, response, next) => {
 
 notesRouter.delete("/:id", (request, response, next) => {
   Note.findByIdAndRemove(request.params.id)
-    .then((result) => {
+    .then(() => {
       response.status(204).end();
     })
     .catch((error) => next(error));
 });
 
-notesRouter.put(":id", (request, response, next) => {
+notesRouter.put("/:id", (request, response, next) => {
   const body = request.body;
 
   const note = {
