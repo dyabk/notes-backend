@@ -16,9 +16,7 @@ notesRouter.get("/:id", (request, response, next) => {
         response.status(404).end();
       }
     })
-    .catch((error) => {
-      next(error);
-    });
+    .catch((error) => next(error));
 });
 
 notesRouter.post("/", (request, response, next) => {
@@ -64,3 +62,5 @@ notesRouter.put(":id", (request, response, next) => {
     })
     .catch((error) => next(error));
 });
+
+module.exports = notesRouter;
